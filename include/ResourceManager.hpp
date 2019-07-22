@@ -1,6 +1,8 @@
 #ifndef RESOURCEMANAGER_HPP
 #define RESOURCEMANAGER_HPP
 
+#define STB_IMAGE_SUPPORT
+
 #include <map>
 #include <string>
 
