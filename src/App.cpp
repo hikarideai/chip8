@@ -118,6 +118,7 @@ void App::nextInstruction() {
   }
 
   uint16_t op = emul.getInstruction();
+  //std::cerr << std::hex << op << std::dec << ' ';
 
   int a = (op & 0x0F00) >> 2 * 4;
   int b = (op & 0x00F0) >> 1 * 4;
@@ -141,7 +142,7 @@ void App::nextInstruction() {
             panic = true;
             msg = "return called with an empty stack.";
           } else {
-            emul.pc = emul.stack[emul.stack_end-- - 1] - 2;
+            emul.pc = emul.stack[--emul.stack_end];
           }
           break;
         default:
@@ -170,7 +171,7 @@ void App::nextInstruction() {
       break;
     case 0x4:
       // NEQ
-      if (emul.V[a] == (op & 0x00FF))
+      if (emul.V[a] != (op & 0x00FF))
         emul.pc += 2;
       break;
     case 0x5:
@@ -311,7 +312,7 @@ void App::nextInstruction() {
       switch (op & 0x00FF) {
         case 0x07:
           // DTGET
-          emul.V[a] = emul.dt;
+          emul.V[a] = emul.getDT();
           break;
         case 0x0A:
           // WAITKEY
@@ -339,11 +340,11 @@ void App::nextInstruction() {
           break;
         case 0x15:
           // DTSET
-          emul.dt = emul.V[a];
+          emul.setDT(emul.V[a]);
           break;
         case 0x18:
           // SNDSET
-          emul.snd = emul.V[a];
+          emul.setSND(emul.V[a]);
           break;
         case 0x1E:
           // IADD

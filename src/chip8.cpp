@@ -4,6 +4,7 @@
 
 #include <cstring>
 #include <chip8.hpp>
+#include <cmath>
 
 #include "chip8.hpp"
 
@@ -22,12 +23,54 @@ void CHIP8::init() {
   I = 0;
   pc = START_POS;
   // Reset timers
-  dt = 0;
-  snd = 0;
+  dt = snd = 0;
+  ddt = dsnd = 0;
 }
 
 int16_t CHIP8::getInstruction() {
   int16_t opcode = mem[pc] << 8;
   opcode |= mem[pc + 1];
   return opcode;
+}
+
+void CHIP8::setDT(unsigned char v) {
+  dt = v;
+  ddt = 0.0;
+  return;
+  ddt -= std::floor(ddt);
+  if (ddt < 0.0)
+    ddt = 0.0;
+}
+
+void CHIP8::setSND(unsigned char v) {
+  snd = v;
+  dsnd = 0.0;
+  return;
+  dsnd -= std::floor(dsnd);
+  if (dsnd < 0.0)
+    dsnd = 0.0;
+}
+
+unsigned char CHIP8::getDT() {
+  return dt ? dt - std::floor(ddt) : 0;
+}
+
+unsigned char CHIP8::getSND() {
+  return snd ? snd - std::floor(dsnd) : 0;
+}
+
+void CHIP8::subDT(double t) {
+  ddt += t;
+  if (dt - std::floor(ddt) <= 0.0) {
+    dt = 0;
+    ddt = 0.0;
+  }
+}
+
+void CHIP8::subSND(double t) {
+  dsnd += t;
+  if (snd - std::floor(dsnd) <= 0.0) {
+    snd = 0;
+    dsnd = 0.0;
+  }
 }

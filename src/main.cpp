@@ -75,7 +75,10 @@ int main(int argc, char * argv[]) {
   }
 
   // Game loop
+  double last_tick;
   while (!glfwWindowShouldClose(window)) {
+    last_tick = glfwGetTime();
+
     glfwPollEvents();
     //ProcessInput()
 
@@ -87,6 +90,11 @@ int main(int argc, char * argv[]) {
     chip8emul->Render();
 
     glfwSwapBuffers(window);
+
+    double now = glfwGetTime();
+    chip8emul->emul.subDT(60 * (now - last_tick));
+    chip8emul->emul.subSND(60* (now - last_tick));
+    last_tick = now;
   }
 
   return 0;

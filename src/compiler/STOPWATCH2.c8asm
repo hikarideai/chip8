@@ -1,0 +1,40 @@
+# STOPWATCH2 
+# Counts seconds from 0 to 255, press F to pause/unpause
+        section .code
+        goto real_start
+
+
+        section .raw
+bcd_data:
+        00 00 00 00
+
+
+        section .code
+real_start:
+        set v3 0
+repeated_start:
+        set v4 60
+        setdt v4
+wait_loop:
+        getdt v4
+        eq v4 0
+        goto wait_loop
+        set vd 30
+        set ve 13
+        clear
+        call draw_num
+        add v3 1
+        goto repeated_start
+draw_num:
+        ld bcd_data
+        bcd v3
+        regload 2
+        glyph v0
+        draw vd ve 5
+        add vd 5
+        glyph v1
+        draw vd ve 5
+        add vd 5
+        glyph v2
+        draw vd ve 5
+        ret

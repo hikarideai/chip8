@@ -19,13 +19,19 @@ struct CHIP8 {
   int16_t I;
   int16_t stack[STACK_DEPTH];
   size_t stack_end;
-  unsigned char dt;
-  unsigned char snd;
+  unsigned char dt, snd;
+  double ddt, dsnd;
   int16_t pc;
 
   CHIP8();
   void init();
   int16_t getInstruction();
+  void setDT(unsigned char val);
+  void setSND(unsigned char val);
+  void subDT(double t);
+  void subSND(double t);
+  unsigned char getDT();
+  unsigned char getSND();
 };
 
 #endif //CHIP8EMUL_CHIP8_HPP
