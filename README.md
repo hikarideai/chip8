@@ -6,8 +6,8 @@ CHIP8 emulation software written with purely academic intention.
 ### Functionality
 ◯ Basic CHIP8 emulation <br />
 ◯ Timers (that're 60Hz) <br />
-◯ ASCII font in binary format
-◯ Sample ROMs
+◯ ASCII font in binary format <br />
+◯ Sample ROMs <br />
 ⬤ Vim-like command frontend <br />
 ⬤ Resizable interface <br />
 ⬤ Beeper <br />
