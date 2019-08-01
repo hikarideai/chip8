@@ -6,8 +6,8 @@
 #include "App.hpp"
 
 static const char * TITLE = "CHIP8 Emulator";
-static const int WIDTH = 800;
-static const int HEIGHT = 400;
+static const int WIDTH = 832;
+static const int HEIGHT = 416;
 
 struct {
   char * file;

@@ -59,7 +59,12 @@ int main(int argc, char *argv[]) {
     std::vector<std::function<std::string(const std::string &)>> 
                                                     section_trans(ModeTypeSize);
     section_trans[TEXT_MODE] = [](const std::string & line) -> std::string {
-        return line;
+        int s = line.find("\"");
+        int e = s + 1;
+        while (e < line.size() && line[e] != '\"')
+            ++e;
+
+        return line.substr(s + 1, e - s - 1);
     };
     section_trans[SKIP_MODE] = [](const std::string & line) -> std::string {
         return "";
@@ -75,10 +80,14 @@ int main(int argc, char *argv[]) {
         line_id++;
         std::getline(file, line);
         // Comment support
-        if (line.empty() || line[0] == '#')
+        if (line[0] == '#')
             continue;
         auto sharp_pos = line.find("#");
         line = line.substr(0, sharp_pos);
+        // Empty lines are ignored
+        auto splt = split(line, isspace);
+        if (splt.empty())
+            continue;
         // section .*** changes the way the lines of the input are being
         // percieved.
         // HACK: dot is only encountered in this statement, so I exploit it.
@@ -189,6 +198,7 @@ std::string raw_trans(const std::string & line) {
             continue;
 
         unsigned char ac = hexchar2dec(line[i],false) << 4;
+        ++i;
         while (i < line.size() && hexchar2dec(line[i], false) == -1)
             ++i;
         if (i < line.size()) {
